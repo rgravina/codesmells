@@ -5,12 +5,12 @@ class LongMethodTests {
     @Test
     fun returnsBalance() {
         val account = LongMethodAccount()
-        assertEquals(account.balance(), 0)
+        assertEquals(0, account.balance())
     }
 
     @Test
     fun returnsBalanceAfterRefactoring() {
         val account = LongMethodAccountRefactored()
-        assertEquals(account.balance(), 0)
+        assertEquals(0, account.balance())
     }
 }
