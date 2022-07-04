@@ -1,12 +1,14 @@
 class AccountNotOpenException: Error()
 
+/*
+  There are a few steps in this method, but it's not clear where one starts and ends.
+  In practice, you may see a lot of code like this. To the person who wrote it at the time, it might look OK.
+  But to someone looking at it for the first time, you have to read the whole function to understand what it does.
+*/
 class LongMethodAccount {
     private var open = true
     private var balance = 0
 
-    // There are a few steps in this method, but it's not clear where one starts and ends.
-    // In practice, you may see a lot of code like this. To the person who wrote it at the time, it might look OK.
-    // But to someone looking at it for the first time, you have to read the whole function to understand what it does.
     fun balance(): Int {
         if (!open) {                                                // Seems like some precondition checking.
             throw AccountNotOpenException()

@@ -19,7 +19,8 @@ class MysteriousNameRefactored {
     fun exchangeToUSD(amountToConvertInJpy: Int): Double {      // This function exchanges JPY to USD and it is clear from the name what it does.
         return amountToConvertInJpy / jpyToUsdRate              // The conversion logic is clearer now
     }
-
-    // Note: There is no need to support converting from any currency to USD in our app, so don't over-engineer at this point.
-    // That is a code smell too, called Speculative Generality. XP warns against this practice with the term YAGNI (You Ain't Going to Need It)
 }
+/*
+  There is no need to support converting from any currency to USD in our app, so don't over-engineer at this point.
+  That is a code smell too, called Speculative Generality. XP warns against this practice with the term YAGNI (You Ain't Going to Need It).
+ */
