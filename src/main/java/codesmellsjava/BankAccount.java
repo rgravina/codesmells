@@ -3,5 +3,13 @@ package codesmellsjava;
 public interface BankAccount {
     void closeAccount();
 
-    int balance();
+    void ensureAccountIsOpen() throws AccountNotOpenException;
+
+    int balance() throws AccountNotOpenException;
+
+    void withdraw(int amount);
+
+    void deposit(int amount);
+
+    void transfer(int amount, BankAccount to) throws InsufficientFundsException, AccountNotOpenException, IllegalArgumentException;
 }

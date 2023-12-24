@@ -13,19 +13,19 @@ abstract class BankAccountTests {
     BankAccount account;
 
     @Test
-    void returnsBalanceWhenZero() {
+    void returnsBalanceWhenZero() throws AccountNotOpenException {
         account = createBankAccount();
         assertEquals(0, account.balance());
     }
 
     @Test
-    void returnsBalanceIfInCredit() {
+    void returnsBalanceIfInCredit() throws AccountNotOpenException {
         account = createBankAccountWithBalance(100);
         assertEquals(100, account.balance());
     }
 
     @Test
-    void returnsZeroBalanceIfInDebt() {
+    void returnsZeroBalanceIfInDebt() throws AccountNotOpenException {
         account = createBankAccountWithBalance(-100);
         assertEquals(0, account.balance());
     }
@@ -35,6 +35,15 @@ abstract class BankAccountTests {
         account = createBankAccountWithBalance(100);
         account.closeAccount();
         assertThrows(AccountNotOpenException.class, account::balance);
+    }
+
+    @Test
+    void transferSendsMoney() throws AccountNotOpenException, InsufficientFundsException {
+        account = createBankAccountWithBalance(100);
+        BankAccount to = createBankAccountWithBalance(50);
+        account.transfer(15, to);
+        assertEquals(85, account.balance());
+        assertEquals(65, to.balance());
     }
 }
 

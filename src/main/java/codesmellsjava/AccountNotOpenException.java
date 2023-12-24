@@ -1,4 +1,4 @@
 package codesmellsjava;
 
-public class AccountNotOpenException extends Error {
+public class AccountNotOpenException extends Exception {
 }

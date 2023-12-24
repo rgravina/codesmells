@@ -22,16 +22,40 @@ public class AccountWithMoreMethods implements BankAccount {
         isOpen = false;
     }
 
-    public int balance() {
+    public int balance() throws AccountNotOpenException {
         ensureAccountIsOpen();
         logBalanceRequest();
         return customerFacingBalance();
     }
 
-    private void ensureAccountIsOpen() {
+    public void ensureAccountIsOpen() throws AccountNotOpenException {
         if (!isOpen) {
             throw new AccountNotOpenException();
         }
+    }
+
+    public void withdraw(int amount) {
+        this.balance -= amount;
+    }
+
+    public void deposit(int amount) {
+        this.balance += amount;
+    }
+
+    public void transfer(int amount, BankAccount to) throws InsufficientFundsException, AccountNotOpenException, IllegalArgumentException {
+        this.ensureAccountIsOpen();
+        to.ensureAccountIsOpen();
+
+        if (amount < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        if (this.balance <= amount) {
+            throw new InsufficientFundsException();
+        }
+
+        this.withdraw(amount);
+        to.deposit(amount);
     }
 
     private void logBalanceRequest() {

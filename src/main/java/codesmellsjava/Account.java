@@ -22,7 +22,13 @@ class Account implements BankAccount {
         isOpen = false;
     }
 
-    public int balance() {
+    public void ensureAccountIsOpen() throws AccountNotOpenException {
+        if (!isOpen) {
+            throw new AccountNotOpenException();
+        }
+    }
+
+    public int balance() throws AccountNotOpenException {
         if (!isOpen) {
             throw new AccountNotOpenException();
         }
@@ -34,5 +40,29 @@ class Account implements BankAccount {
         }
 
         return balance;
+    }
+
+    public void withdraw(int amount) {
+        this.balance -= amount;
+    }
+
+    public void deposit(int amount) {
+        this.balance += amount;
+    }
+
+    public void transfer(int amount, BankAccount to) throws InsufficientFundsException, AccountNotOpenException {
+        this.ensureAccountIsOpen();
+        to.ensureAccountIsOpen();
+
+        if (amount < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        if (this.balance <= amount) {
+            throw new InsufficientFundsException();
+        }
+
+        this.withdraw(amount);
+        to.deposit(amount);
     }
 }
