@@ -6,6 +6,8 @@ package codesmellsjava;
   But to someone looking at it for the first time, you have to read the whole function to understand what it does.
 */
 
+import java.util.Objects;
+
 class Account implements BankAccount {
     private boolean isOpen = true;
     private int balance;
@@ -64,5 +66,18 @@ class Account implements BankAccount {
 
         this.withdraw(amount);
         to.deposit(amount);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return isOpen == account.isOpen && balance == account.balance;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(isOpen, balance);
     }
 }
