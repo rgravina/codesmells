@@ -3,7 +3,7 @@ package codesmellsjava;
 import java.util.List;
 
 public class TransferRepositoryWithParameterObject {
-    private TransferStore store;
+    private final TransferStore store;
 
     public TransferRepositoryWithParameterObject(TransferStore store) {
         this.store = store;
