@@ -2,7 +2,6 @@ package codesmellsjava;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -15,16 +14,6 @@ abstract class Report {
         this.account = account;
     }
 
-    abstract String name();
-
-    abstract List<String> items(DateRange period);
-
-    public String title(DateRange period) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(String.format("%s for account %s - (%s - %s)", this.name(), account.name(), formatter.format(period.from()), formatter.format(period.to())));
-        return builder.toString();
-    }
-
     public String report(DateRange period) {
         StringBuilder builder = new StringBuilder();
         builder.append(title(period));
@@ -32,6 +21,15 @@ abstract class Report {
         return builder.toString();
     }
 
+    abstract String name();
+
+    abstract List<String> items(DateRange period);
+
+    private String title(DateRange period) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(String.format("%s for account %s - (%s - %s)", this.name(), account.name(), formatter.format(period.from()), formatter.format(period.to())));
+        return builder.toString();
+    }
 }
 
 class TransactionReport extends Report {
@@ -75,13 +73,14 @@ class InterestReport extends Report {
 }
 
 class CompleteReport extends Report {
-    private final TransactionReport transactionReport;
-    private final InterestReport interestReport;
+    private List<Report> reports = List.of();
 
-    CompleteReport(BankAccount account, TransactionReport transactionReport, InterestReport interestReport) {
+    CompleteReport(BankAccount account) {
         super(account);
-        this.transactionReport = transactionReport;
-        this.interestReport = interestReport;
+    }
+
+    void addReport(Report report) {
+        reports.add(report);
     }
 
     String name() {
@@ -89,12 +88,7 @@ class CompleteReport extends Report {
     }
 
     List<String> items(DateRange period) {
-        List<String> items = new ArrayList<>();
-        items.add("Interest payments");
-        items.addAll(interestReport.items(period));
-        items.add("Transactions");
-        items.addAll(transactionReport.items(period));
-        return items;
+        return reports.stream().map(report -> report.name() + report.items(period)).collect(toList());
     }
 }
 
@@ -118,10 +112,9 @@ public class StatementTemplate {
     }
 
     public String completeReport(DateRange period) {
-        return new CompleteReport(
-                account,
-                new TransactionReport(account, transferRepository),
-                new InterestReport(account, interestPaymentRepository)
-        ).report(period);
+        CompleteReport completeReport = new CompleteReport(account);
+        completeReport.addReport(new InterestReport(account, interestPaymentRepository));
+        completeReport.addReport(new TransactionReport(account, transferRepository));
+        return completeReport.report(period);
     }
 }
