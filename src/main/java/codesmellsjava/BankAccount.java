@@ -5,6 +5,8 @@ public interface BankAccount {
 
     void ensureAccountIsOpen() throws AccountNotOpenException;
 
+    String name();
+
     int balance() throws AccountNotOpenException;
 
     void withdraw(int amount);

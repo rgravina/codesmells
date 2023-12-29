@@ -9,14 +9,17 @@ package codesmellsjava;
 import java.util.Objects;
 
 class Account implements BankAccount {
+    private String name;
     private boolean isOpen = true;
     private int balance;
 
-    public Account() {
+    public Account(String name) {
+        this.name = name;
         this.balance = 0;
     }
 
-    public Account(int initialBalance) {
+    public Account(String name, int initialBalance) {
+        this.name = name;
         this.balance = initialBalance;
     }
 
@@ -28,6 +31,10 @@ class Account implements BankAccount {
         if (!isOpen) {
             throw new AccountNotOpenException();
         }
+    }
+
+    public String name() {
+        return name;
     }
 
     public int balance() throws AccountNotOpenException {

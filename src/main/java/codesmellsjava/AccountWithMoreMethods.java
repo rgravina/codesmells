@@ -7,14 +7,17 @@ package codesmellsjava;
   might be too long, it contains a long or complex if statement, and many more.
  */
 public class AccountWithMoreMethods implements BankAccount {
+    private String name;
     private boolean isOpen = true;
     private int balance;
 
-    public AccountWithMoreMethods() {
+    public AccountWithMoreMethods(String name) {
+        this.name = name;
         this.balance = 0;
     }
 
-    public AccountWithMoreMethods(int initialBalance) {
+    public AccountWithMoreMethods(String name, int initialBalance) {
+        this.name = name;
         this.balance = initialBalance;
     }
 
@@ -32,6 +35,10 @@ public class AccountWithMoreMethods implements BankAccount {
         if (!isOpen) {
             throw new AccountNotOpenException();
         }
+    }
+
+    public String name() {
+        return name;
     }
 
     public void withdraw(int amount) {

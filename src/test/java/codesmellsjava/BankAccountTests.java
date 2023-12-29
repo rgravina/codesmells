@@ -50,23 +50,23 @@ abstract class BankAccountTests {
 class AccountTest extends BankAccountTests {
     @Override
     public BankAccount createBankAccount() {
-        return new Account();
+        return new Account("test");
     }
 
     @Override
     public BankAccount createBankAccountWithBalance(int balance) {
-        return new Account(balance);
+        return new Account("test", balance);
     }
 }
 
 class AccountWithMoreMethodsTest extends BankAccountTests {
     @Override
     public BankAccount createBankAccount() {
-        return new AccountWithMoreMethods();
+        return new AccountWithMoreMethods("test");
     }
 
     @Override
     public BankAccount createBankAccountWithBalance(int balance) {
-        return new AccountWithMoreMethods(balance);
+        return new AccountWithMoreMethods("test", balance);
     }
 }
