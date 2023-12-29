@@ -1,11 +1,14 @@
 package codesmellsjava;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
 abstract class Report {
+    private final DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     private final BankAccount account;
 
     Report(BankAccount account) {
@@ -18,7 +21,7 @@ abstract class Report {
 
     public String title(DateRange period) {
         StringBuilder builder = new StringBuilder();
-        builder.append(String.format("%s for account %s - (%s - %s)", this.name(), account.name(), period.from(), period.to()));
+        builder.append(String.format("%s for account %s - (%s - %s)", this.name(), account.name(), formatter.format(period.from()), formatter.format(period.to())));
         return builder.toString();
     }
 

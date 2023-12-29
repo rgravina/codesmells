@@ -9,6 +9,11 @@ package codesmellsjava;
 import java.util.Objects;
 
 class Account implements BankAccount {
+    @Override
+    public String toString() {
+        return name;
+    }
+
     private String name;
     private boolean isOpen = true;
     private int balance;

@@ -6,13 +6,13 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 class StubTransferStore implements TransferStore {
-    private final Account from;
-    private final Account to;
+    private final BankAccount from;
+    private final BankAccount to;
     public Date between_from;
     public Date between_to;
     public boolean pending_includePending;
 
-    public StubTransferStore(Account from, Account to) {
+    public StubTransferStore(BankAccount from, BankAccount to) {
         this.from = from;
         this.to = to;
     }
