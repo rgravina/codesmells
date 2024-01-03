@@ -13,7 +13,7 @@ class MonthlyInterestCalculatorTest {
         TransferRepository repository = new TransferRepository(store);
         MonthlyInterestCalculator calculator = new MonthlyInterestCalculator(from, repository);
 
-        assertEquals(0, calculator.interestRateForMonth(2023, 12));
+        assertEquals(0, calculator.interestForMonth(2023, 12));
     }
 
     @Test
@@ -24,6 +24,6 @@ class MonthlyInterestCalculatorTest {
         TransferRepository repository = new TransferRepository(store);
         MonthlyInterestCalculator calculator = new MonthlyInterestCalculator(from, repository);
 
-        assertEquals(1, calculator.interestRateForMonth(2023, 11));
+        assertEquals(1, calculator.interestForMonth(2023, 11));
     }
 }

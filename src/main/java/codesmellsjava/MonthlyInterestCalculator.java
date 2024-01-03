@@ -10,7 +10,11 @@ public class MonthlyInterestCalculator {
         this.transferRepository = transferRepository;
     }
 
-    public Double interestRateForMonth(int year, int month) throws AccountNotOpenException {
-        return Math.ceil(30 * (account.balance() * DAILY_RATE));
+    public int interestForMonth(int year, int month) throws AccountNotOpenException {
+        double interest = 0;
+        for (int i = 0; i < 30; i++) {
+            interest += account.balance() * DAILY_RATE;
+        }
+        return (int) Math.ceil(interest);
     }
 }
