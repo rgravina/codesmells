@@ -15,7 +15,7 @@ public class MonthlyInterestCalculator {
     public int interestForMonth(int year, int month) throws AccountNotOpenException {
         double interest = 0;
         int daysInMonth = YearMonth.of(year, month).lengthOfMonth();
-        for (int i = 0; i < daysInMonth; i++) {
+        for (int day = 1; day <= daysInMonth; day++) {
             interest += account.balance() * DAILY_RATE;
         }
         return (int) Math.ceil(interest);
