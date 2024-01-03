@@ -6,36 +6,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MonthlyInterestCalculatorTest {
     @Test
-    void interestWhenMonthHasNoBalanceOrTransactions() throws AccountNotOpenException {
-        Account from = new Account("test");
-        Account to = new Account("test");
-        StubTransferStore store = new StubTransferStore(from, to);
-        TransferRepository repository = new TransferRepository(store);
-        MonthlyInterestCalculator calculator = new MonthlyInterestCalculator(from, repository);
-
-        assertEquals(0, calculator.interestForMonth(2023, 12));
-    }
-
-    @Test
-    void interestWithMonthsOfDifferentLength() throws AccountNotOpenException {
-        Account from = new Account("test", 50000);
-        Account to = new Account("test");
-        StubTransferStore store = new StubTransferStore(from, to);
-        TransferRepository repository = new TransferRepository(store);
-        MonthlyInterestCalculator calculator = new MonthlyInterestCalculator(from, repository);
+    void interestWithMonthsOfDifferentLengthAndBalances() throws AccountNotOpenException {
+        Account account = new Account("test", 50000);
+        StubBalanceStore store = new StubBalanceStore();
+        BalanceRepository repository = new BalanceRepository(store);
+        MonthlyInterestCalculator calculator = new MonthlyInterestCalculator(repository);
 
         assertEquals(225, calculator.interestForMonth(2023, 11));
-        assertEquals(233, calculator.interestForMonth(2023, 12));
-    }
-
-    @Test
-    void interestWhenMonthHasBalanceOnly() throws AccountNotOpenException {
-        Account from = new Account("test", 50000);
-        Account to = new Account("test");
-        StubTransferStore store = new StubTransferStore(from, to);
-        TransferRepository repository = new TransferRepository(store);
-        MonthlyInterestCalculator calculator = new MonthlyInterestCalculator(from, repository);
-
-        assertEquals(225, calculator.interestForMonth(2023, 11));
+        assertEquals(159, calculator.interestForMonth(2023, 12));
+        assertEquals(2023, store.balance_year);
+        assertEquals(12, store.balance_month);
+        assertEquals(31, store.balance_day);
     }
 }

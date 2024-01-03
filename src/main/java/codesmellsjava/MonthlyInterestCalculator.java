@@ -4,19 +4,17 @@ import java.time.YearMonth;
 
 public class MonthlyInterestCalculator {
     private final double DAILY_RATE = 0.00015;
-    private BankAccount account;
-    private final TransferRepository transferRepository;
+    private final BalanceRepository balanceRepository;
 
-    public MonthlyInterestCalculator(BankAccount account, TransferRepository transferRepository) {
-        this.account = account;
-        this.transferRepository = transferRepository;
+    public MonthlyInterestCalculator(BalanceRepository balanceRepository) {
+        this.balanceRepository = balanceRepository;
     }
 
-    public int interestForMonth(int year, int month) throws AccountNotOpenException {
+    public int interestForMonth(int year, int month) {
         double interest = 0;
         int daysInMonth = YearMonth.of(year, month).lengthOfMonth();
         for (int day = 1; day <= daysInMonth; day++) {
-            interest += account.balance() * DAILY_RATE;
+            interest += balanceRepository.balance(year, month, day) * DAILY_RATE;
         }
         return (int) Math.ceil(interest);
     }
