@@ -18,12 +18,13 @@ class MonthlyInterestCalculatorTest {
 
     @Test
     void interestWhenMonthHasBalanceOnly() throws AccountNotOpenException {
-        Account from = new Account("test", 200);
+        Account from = new Account("test", 50000);
         Account to = new Account("test");
         StubTransferStore store = new StubTransferStore(from, to);
         TransferRepository repository = new TransferRepository(store);
         MonthlyInterestCalculator calculator = new MonthlyInterestCalculator(from, repository);
 
-        assertEquals(1, calculator.interestForMonth(2023, 11));
+        assertEquals(225, calculator.interestForMonth(2023, 11));
+        assertEquals(233, calculator.interestForMonth(2023, 12));
     }
 }
