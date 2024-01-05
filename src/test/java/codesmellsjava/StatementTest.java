@@ -12,8 +12,8 @@ class StatementTest {
     private final DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     @Test
     void transactionReport() throws ParseException {
-        BankAccount from = new Account("test", 20);
-        BankAccount to = new Account("test", 30);
+        BankAccount from = new Account("test",  AccountType.TRANSACTION, 20);
+        BankAccount to = new Account("test",  AccountType.TRANSACTION, 30);
         TransferRepository transferRepository = new TransferRepository(new StubTransferStore(from, to));
         InterestPaymentRepository interestPaymentRepository = new InterestPaymentRepository();
         Statement statement = new Statement(from, transferRepository, interestPaymentRepository);

@@ -9,6 +9,8 @@ package codesmellsjava;
 import java.util.Objects;
 
 class Account implements BankAccount {
+    private final AccountType accountType;
+
     @Override
     public String toString() {
         return name;
@@ -18,12 +20,18 @@ class Account implements BankAccount {
     private boolean isOpen = true;
     private int balance;
 
+    public AccountType accountType() {
+        return accountType;
+    }
+
     public Account(String name) {
         this.name = name;
+        this.accountType = AccountType.TRANSACTION;
         this.balance = 0;
     }
 
-    public Account(String name, int initialBalance) {
+    public Account(String name, AccountType accountType, int initialBalance) {
+        this.accountType = accountType;
         this.name = name;
         this.balance = initialBalance;
     }

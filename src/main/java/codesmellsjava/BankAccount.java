@@ -7,6 +7,8 @@ public interface BankAccount {
 
     String name();
 
+    AccountType accountType();
+
     int balance() throws AccountNotOpenException;
 
     void withdraw(int amount);

@@ -55,7 +55,7 @@ class AccountTest extends BankAccountTests {
 
     @Override
     public BankAccount createBankAccountWithBalance(int balance) {
-        return new Account("test", balance);
+        return new Account("test", AccountType.TRANSACTION, balance);
     }
 }
 
@@ -67,6 +67,6 @@ class AccountWithMoreMethodsTest extends BankAccountTests {
 
     @Override
     public BankAccount createBankAccountWithBalance(int balance) {
-        return new AccountWithMoreMethods("test", balance);
+        return new AccountWithMoreMethods("test", AccountType.TRANSACTION, balance);
     }
 }

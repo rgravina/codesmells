@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TransferRepositoryTest {
     private final DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-    Account from = new Account("test", 200);
+    Account from = new Account("test", AccountType.TRANSACTION, 200);
     Account to = new Account("test");
 
     @Test
