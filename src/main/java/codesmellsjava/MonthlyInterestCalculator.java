@@ -26,7 +26,7 @@ public class MonthlyInterestCalculator {
             try {
                 interest += balanceRepository.balance(year, month, day) * (account.accountType() == AccountType.TRANSACTION ?
                         TRANSACTION_DAILY_RATE :
-                        (long) transactionRepository.all(
+                        transactionRepository.all(
                                 formatter.parse("%d-%d-%d".formatted(year, month, 1)),
                                 formatter.parse("%d-%d-%d".formatted(year, month, daysInMonth)),
                                 false
