@@ -12,9 +12,9 @@ The date checking logic, is there a better place for it?
 */
 
 public class TransferRepository {
-    private final TransferStore store;
+    private final Store<Transfer> store;
 
-    public TransferRepository(TransferStore store) {
+    public TransferRepository(Store<Transfer> store) {
         this.store = store;
     }
 

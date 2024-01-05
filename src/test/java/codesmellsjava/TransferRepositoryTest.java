@@ -35,7 +35,7 @@ class TransferRepositoryTest {
 
     @Test
     void throwsErrorIfDateRangeInvalid() {
-        TransferStore store = new StubTransferStore(from, to);
+        Store<Transfer> store = new StubTransferStore(from, to);
         TransferRepository repository = new TransferRepository(store);
 
         assertThrows(IllegalArgumentException.class, () -> {
@@ -45,7 +45,7 @@ class TransferRepositoryTest {
 
     @Test
     void throwsErrorIfDateRangeInFuture() {
-        TransferStore store = new StubTransferStore(from, to);
+        Store<Transfer> store = new StubTransferStore(from, to);
         TransferRepository repository = new TransferRepository(store);
 
         assertThrows(IllegalArgumentException.class, () -> {

@@ -5,36 +5,37 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 
-class StubTransferStore implements Store<Transfer> {
+public class StubTransactionStore implements Store<Transaction> {
     private final BankAccount from;
-    private final BankAccount to;
     public Date between_from;
     public Date between_to;
     public boolean pending_includePending;
 
-    public StubTransferStore(BankAccount from, BankAccount to) {
+    public StubTransactionStore(BankAccount from) {
         this.from = from;
-        this.to = to;
     }
 
     @Override
-    public Store<Transfer> between(Date from, Date to) {
+    public Store<Transaction> between(Date from, Date to) {
         between_from = from;
         between_to = to;
         return this;
     }
 
     @Override
-    public Store<Transfer> pending(boolean includePending) {
+    public Store<Transaction> pending(boolean includePending) {
         pending_includePending = includePending;
         return this;
     }
 
     @Override
-    public List<Transfer> execute() {
+    public List<Transaction> execute() {
         return asList(
-                new Transfer(100, from, to),
-                new Transfer(25, from, to)
+                new Transaction(150, from),
+                new Transaction(75, from),
+                new Transaction(15, from),
+                new Transaction(10, from),
+                new Transaction(12, from)
         );
     }
 }
