@@ -12,11 +12,17 @@ public class MonthlyInterestCalculator {
     private final BankAccount account;
     private final BalanceRepository balanceRepository;
     private final TransactionRepository transactionRepository;
+    private final TransferRepository transferRepository;
 
-    public MonthlyInterestCalculator(BankAccount account, BalanceRepository balanceRepository, TransactionRepository transactionRepository) {
+    public MonthlyInterestCalculator(
+            BankAccount account,
+            BalanceRepository balanceRepository,
+            TransactionRepository transactionRepository,
+            TransferRepository transferRepository) {
         this.account = account;
         this.balanceRepository = balanceRepository;
         this.transactionRepository = transactionRepository;
+        this.transferRepository = transferRepository;
     }
 
     public int interestForMonth(int year, int month) {
