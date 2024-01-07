@@ -34,7 +34,8 @@ class StubTransferStore implements Store<Transfer> {
     public List<Transfer> execute() {
         return asList(
                 new Transfer(100, from, to),
-                new Transfer(25, from, to)
+                new Transfer(25, from, to),
+                new Transfer(900, from, to)
         );
     }
 }

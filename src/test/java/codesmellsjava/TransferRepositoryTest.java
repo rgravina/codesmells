@@ -26,11 +26,12 @@ class TransferRepositoryTest {
                 true
         );
 
-        assertEquals(2, transfers.size());
+        assertEquals(3, transfers.size());
         assertEquals(formatter.parse("2023-12-25"), store.between_from);
         assertEquals(formatter.parse("2023-12-26"), store.between_to);
         assertEquals(new Transfer(100, from, to), transfers.get(0));
         assertEquals(new Transfer(25, from, to), transfers.get(1));
+        assertEquals(new Transfer(900, from, to), transfers.get(2));
     }
 
     @Test

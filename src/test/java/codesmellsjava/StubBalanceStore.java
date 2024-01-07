@@ -14,7 +14,7 @@ public class StubBalanceStore implements BalanceStore {
             return 0;
         }
         if (year == 2023 && month == 11) {
-            return 50000;
+            return 30000;
         }
         if (year == 2023 && month == 12 && day < 15) {
             return 40000;

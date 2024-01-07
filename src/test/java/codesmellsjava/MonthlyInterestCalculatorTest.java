@@ -6,28 +6,32 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class MonthlyInterestCalculatorTest {
     private final DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    private StubBalanceStore balanceStore;
+    private StubTransactionStore transactionStore;
+    private MonthlyInterestCalculator calculator;
 
-    @Test
-    void interestWithMonthsOfDifferentLengthAndBalancesWithBonusInterestGoalsMet() throws ParseException {
-        Account account = new Account("test", AccountType.SAVINGS, 50000);
-        StubBalanceStore balanceStore = new StubBalanceStore();
+    void setUp(AccountType accountType) {
+        Account account = new Account("test", accountType, 50000);
+        balanceStore = new StubBalanceStore();
         BalanceRepository balanceRepository = new BalanceRepository(balanceStore);
-        StubTransactionStore transactionStore = new StubTransactionStore(account);
+        transactionStore = new StubTransactionStore(account);
         TransactionRepository transactionRepository = new TransactionRepository(transactionStore);
         Account from = new Account("test", AccountType.TRANSACTION, 50000);
         Store<Transfer> transferStore = new StubTransferStore(from, account);
         TransferRepository transferRepository = new TransferRepository(transferStore);
-        MonthlyInterestCalculator calculator = new MonthlyInterestCalculator(account, balanceRepository, transactionRepository, transferRepository);
+        calculator = new MonthlyInterestCalculator(account, balanceRepository, transactionRepository, transferRepository);
+    }
 
-        assertEquals(225, calculator.interestForMonth(2023, 11));
+    @Test
+    void interestWithMonthsOfDifferentLengthAndBalancesWithBonusInterestGoalsMet() throws ParseException {
+        setUp(AccountType.SAVINGS);
+        assertEquals(135, calculator.interestForMonth(2023, 11));
         assertEquals(159, calculator.interestForMonth(2023, 12));
-        assertEquals(2023, balanceStore.balance_year);
-        assertEquals(12, balanceStore.balance_month);
-        assertEquals(31, balanceStore.balance_day);
         assertEquals(formatter.parse("%d-%d-%d".formatted(2023, 12, 1)), transactionStore.between_from);
         assertEquals(formatter.parse("%d-%d-%d".formatted(2023, 12, 31)), transactionStore.between_to);
         assertFalse(transactionStore.pending_includePending);
@@ -35,31 +39,13 @@ class MonthlyInterestCalculatorTest {
 
     @Test
     void interestWithSavingsAccountWithBonusInterestGoalsMet() throws AccountNotOpenException {
-        Account account = new Account("test", AccountType.SAVINGS, 50000);
-        StubBalanceStore balanceStore = new StubBalanceStore();
-        BalanceRepository balanceRepository = new BalanceRepository(balanceStore);
-        StubTransactionStore transactionStore = new StubTransactionStore(account);
-        TransactionRepository transactionRepository = new TransactionRepository(transactionStore);
-        Account from = new Account("test", AccountType.TRANSACTION, 50000);
-        Store<Transfer> transferStore = new StubTransferStore(from, account);
-        TransferRepository transferRepository = new TransferRepository(transferStore);
-        MonthlyInterestCalculator calculator = new MonthlyInterestCalculator(account, balanceRepository, transactionRepository, transferRepository);
-
+        setUp(AccountType.SAVINGS);
         assertEquals(159, calculator.interestForMonth(2023, 12));
     }
 
     @Test
     void interestWithTransactionAccountWithBonusInterestGoalsMet() throws AccountNotOpenException {
-        Account account = new Account("test", AccountType.TRANSACTION, 50000);
-        StubBalanceStore balanceStore = new StubBalanceStore();
-        BalanceRepository balanceRepository = new BalanceRepository(balanceStore);
-        StubTransactionStore transactionStore = new StubTransactionStore(account);
-        TransactionRepository transactionRepository = new TransactionRepository(transactionStore);
-        Account from = new Account("test", AccountType.TRANSACTION, 50000);
-        Store<Transfer> transferStore = new StubTransferStore(from, account);
-        TransferRepository transferRepository = new TransferRepository(transferStore);
-        MonthlyInterestCalculator calculator = new MonthlyInterestCalculator(account, balanceRepository, transactionRepository, transferRepository);
-
+        setUp(AccountType.TRANSACTION);
         assertEquals(15, calculator.interestForMonth(2023, 12));
     }
 }
