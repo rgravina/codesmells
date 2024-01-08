@@ -30,16 +30,18 @@ public class MonthlyInterestCalculator {
 
         for (int day = 1; day <= daysInMonth; day++) {
             int balanceOnDay = balanceRepository.balance(year, month, day);
-            double dailyInterestRate = account.accountType() == AccountType.TRANSACTION ?
-                    TRANSACTION_DAILY_RATE :
-                    hasMetBonusInterestRequirements(yearMonth, currentBalance) ?
-                            SAVINGS_DAILY_RATE :
-                            TRANSACTION_DAILY_RATE;
-
-            interest += balanceOnDay * dailyInterestRate;
+            interest += balanceOnDay * dailyInterestRate(yearMonth, currentBalance);
         }
 
         return (int) Math.ceil(interest);
+    }
+
+    private double dailyInterestRate(YearMonth yearMonth, int currentBalance) {
+        return account.accountType() == AccountType.TRANSACTION ?
+                TRANSACTION_DAILY_RATE :
+                hasMetBonusInterestRequirements(yearMonth, currentBalance) ?
+                        SAVINGS_DAILY_RATE :
+                        TRANSACTION_DAILY_RATE;
     }
 
     private boolean hasMetBonusInterestRequirements(YearMonth yearMonth, int currentBalance) {
