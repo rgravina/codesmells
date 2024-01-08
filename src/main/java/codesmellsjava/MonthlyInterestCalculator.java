@@ -40,7 +40,9 @@ public class MonthlyInterestCalculator {
                                 formatter.parse("%d-%d-%d".formatted(year, month, 1)),
                                 formatter.parse("%d-%d-%d".formatted(year, month, daysInMonth)),
                                 false
-                        ).isEmpty() && balanceRepository.balance(year, month - 1 <= 0 ? 12 : month - 1, 1) < account.balance() ?
+                        ).isEmpty() && balanceRepository.balance(
+                                month - 1 <= 0 ? year - 1 : year,
+                                month - 1 <= 0 ? 12 : month - 1, 1) < account.balance() ?
                                 SAVINGS_DAILY_RATE :
                                 TRANSACTION_DAILY_RATE
                 );

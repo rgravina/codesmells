@@ -52,6 +52,7 @@ class MonthlyInterestCalculatorTest {
     void interestWithSavingsAccountForJanuary() throws AccountNotOpenException {
         setUp(AccountType.SAVINGS);
         assertEquals(93, calculator.interestForMonth(2023, 1));
+        assertEquals(2022, balanceStore.balance_year);
         assertEquals(12, balanceStore.balance_month);
     }
 }
