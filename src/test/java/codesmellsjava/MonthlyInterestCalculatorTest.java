@@ -6,8 +6,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 class MonthlyInterestCalculatorTest {
     private final DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -47,5 +46,12 @@ class MonthlyInterestCalculatorTest {
     void interestWithTransactionAccountWithBonusInterestGoalsMet() throws AccountNotOpenException {
         setUp(AccountType.TRANSACTION);
         assertEquals(15, calculator.interestForMonth(2023, 12));
+    }
+
+    @Test
+    void interestWithSavingsAccountForJanuary() throws AccountNotOpenException {
+        setUp(AccountType.SAVINGS);
+        assertEquals(93, calculator.interestForMonth(2023, 1));
+        assertEquals(12, balanceStore.balance_month);
     }
 }
