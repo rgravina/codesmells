@@ -29,24 +29,10 @@ public class MonthlyInterestCalculator {
         int currentBalance = account.balance();
 
         for (int day = 1; day <= daysInMonth; day++) {
-            DateRange currentMonth = DateRange.rangeForMonth(year, month);
-
             int balanceOnDay = balanceRepository.balance(year, month, day);
-
-            boolean hasMinimumNumberOfTransactionsThisMonth = transactionRepository.all(currentMonth, false).size() >= MIN_TRANSACTIONS_FOR_BONUS_INTEREST;
-            boolean hasHadMoneyDeposited = !transferRepository.all(currentMonth, false).isEmpty();
-            boolean balanceIsHigherThanEndOfPreviousMonth = balanceRepository.balance(
-                    yearMonth.minusYears(1).getYear(),
-                    yearMonth.minusMonths(1).getMonthValue(),
-                    1) < currentBalance;
-
-            boolean bonusInterestRequirementsMet = hasMinimumNumberOfTransactionsThisMonth &&
-                    hasHadMoneyDeposited &&
-                    balanceIsHigherThanEndOfPreviousMonth;
-
             double dailyInterestRate = account.accountType() == AccountType.TRANSACTION ?
                     TRANSACTION_DAILY_RATE :
-                    bonusInterestRequirementsMet ?
+                    hasMetBonusInterestRequirements(yearMonth, currentBalance) ?
                             SAVINGS_DAILY_RATE :
                             TRANSACTION_DAILY_RATE;
 
@@ -54,5 +40,19 @@ public class MonthlyInterestCalculator {
         }
 
         return (int) Math.ceil(interest);
+    }
+
+    private boolean hasMetBonusInterestRequirements(YearMonth yearMonth, int currentBalance) {
+        DateRange currentMonth = DateRange.rangeForMonth(yearMonth.getYear(), yearMonth.getMonthValue());
+        boolean hasMinimumNumberOfTransactionsThisMonth = transactionRepository.all(currentMonth, false).size() >= MIN_TRANSACTIONS_FOR_BONUS_INTEREST;
+        boolean hasHadMoneyDeposited = !transferRepository.all(currentMonth, false).isEmpty();
+        boolean balanceIsHigherThanEndOfPreviousMonth = balanceRepository.balance(
+                yearMonth.minusYears(1).getYear(),
+                yearMonth.minusMonths(1).getMonthValue(),
+                1) < currentBalance;
+
+        return hasMinimumNumberOfTransactionsThisMonth &&
+                hasHadMoneyDeposited &&
+                balanceIsHigherThanEndOfPreviousMonth;
     }
 }
