@@ -32,12 +32,18 @@ public class MonthlyInterestCalculator {
             DateRange currentMonth = DateRange.rangeForMonth(year, month);
 
             int balanceOnDay = balanceRepository.balance(year, month, day);
-            boolean bonusInterestRequirementsMet = transactionRepository.all(currentMonth, false).size() >= MIN_TRANSACTIONS_FOR_BONUS_INTEREST &&
-                    !transferRepository.all(currentMonth, false).isEmpty() &&
-                    balanceRepository.balance(
-                            yearMonth.minusYears(1).getYear(),
-                            yearMonth.minusMonths(1).getMonthValue(),
-                            1) < currentBalance;
+
+            boolean hasMinimumNumberOfTransactionsThisMonth = transactionRepository.all(currentMonth, false).size() >= MIN_TRANSACTIONS_FOR_BONUS_INTEREST;
+            boolean hasHadMoneyDeposited = !transferRepository.all(currentMonth, false).isEmpty();
+            boolean balanceIsHigherThanEndOfPreviousMonth = balanceRepository.balance(
+                    yearMonth.minusYears(1).getYear(),
+                    yearMonth.minusMonths(1).getMonthValue(),
+                    1) < currentBalance;
+
+            boolean bonusInterestRequirementsMet = hasMinimumNumberOfTransactionsThisMonth &&
+                    hasHadMoneyDeposited &&
+                    balanceIsHigherThanEndOfPreviousMonth;
+
             double dailyInterestRate = account.accountType() == AccountType.TRANSACTION ?
                     TRANSACTION_DAILY_RATE :
                     bonusInterestRequirementsMet ?
