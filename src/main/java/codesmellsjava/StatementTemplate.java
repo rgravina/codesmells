@@ -45,7 +45,7 @@ class TransactionReport extends Report {
     }
 
     List<String> items(DateRange period) {
-        return transferRepository.all(period.from(), period.to(), false)
+        return transferRepository.all(period, false)
                 .stream()
                 .map(transfer -> String.format("From: %s, To: %s, Amount: %s", transfer.from(), transfer.to(), transfer.amount()))
                 .collect(toList());

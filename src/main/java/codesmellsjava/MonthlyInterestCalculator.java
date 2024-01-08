@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.time.YearMonth;
 
 public class MonthlyInterestCalculator {
+    public static final int MIN_TRANSACTIONS_FOR_BONUS_INTEREST = 5;
     private final DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     private final double SAVINGS_DAILY_RATE = 0.00015;
     private final double TRANSACTION_DAILY_RATE = 0.0000137;
@@ -27,22 +28,24 @@ public class MonthlyInterestCalculator {
 
     public int interestForMonth(int year, int month) {
         double interest = 0;
-        int daysInMonth = YearMonth.of(year, month).lengthOfMonth();
+        YearMonth yearMonth = YearMonth.of(year, month);
+        int daysInMonth = yearMonth.lengthOfMonth();
+
         for (int day = 1; day <= daysInMonth; day++) {
             try {
+                DateRange currentMonth = new DateRange(
+                        formatter.parse("%d-%d-%d".formatted(year, month, 1)),
+                        formatter.parse("%d-%d-%d".formatted(year, month, daysInMonth))
+                );
+
                 interest += balanceRepository.balance(year, month, day) * (account.accountType() == AccountType.TRANSACTION ?
                         TRANSACTION_DAILY_RATE :
-                        transactionRepository.all(
-                                formatter.parse("%d-%d-%d".formatted(year, month, 1)),
-                                formatter.parse("%d-%d-%d".formatted(year, month, daysInMonth)),
-                                false
-                        ).size() >= 5 && !transferRepository.all(
-                                formatter.parse("%d-%d-%d".formatted(year, month, 1)),
-                                formatter.parse("%d-%d-%d".formatted(year, month, daysInMonth)),
-                                false
-                        ).isEmpty() && balanceRepository.balance(
-                                month - 1 <= 0 ? year - 1 : year,
-                                month - 1 <= 0 ? 12 : month - 1, 1) < account.balance() ?
+                        transactionRepository.all(currentMonth, false).size() >= MIN_TRANSACTIONS_FOR_BONUS_INTEREST &&
+                                !transferRepository.all(currentMonth, false).isEmpty() &&
+                                balanceRepository.balance(
+                                        yearMonth.minusYears(1).getYear(),
+                                        yearMonth.minusMonths(1).getMonthValue(),
+                                        1) < account.balance() ?
                                 SAVINGS_DAILY_RATE :
                                 TRANSACTION_DAILY_RATE
                 );
@@ -50,6 +53,7 @@ public class MonthlyInterestCalculator {
                 throw new RuntimeException(e);
             }
         }
+
         return (int) Math.ceil(interest);
     }
 }

@@ -21,7 +21,7 @@ class StatementWithSmallChanges {
 
     private String transactionReportItems(DateRange period) {
         StringBuilder builder = new StringBuilder();
-        for (Transfer transfer : transferRepository.all(period.from(), period.to(), false)) {
+        for (Transfer transfer : transferRepository.all(period, false)) {
             builder.append(String.format("From: %s, To: %s, Amount: %s", transfer.from(), transfer.to(), transfer.amount()));
         }
         return builder.toString();

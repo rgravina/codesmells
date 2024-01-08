@@ -21,8 +21,7 @@ class TransferRepositoryTest {
         TransferRepository repository = new TransferRepository(store);
 
         List<Transfer> transfers = repository.all(
-                formatter.parse("2023-12-25"),
-                formatter.parse("2023-12-26"),
+                new DateRange(formatter.parse("2023-12-25"), formatter.parse("2023-12-26")),
                 true
         );
 
@@ -40,7 +39,7 @@ class TransferRepositoryTest {
         TransferRepository repository = new TransferRepository(store);
 
         assertThrows(IllegalArgumentException.class, () -> {
-            repository.all(formatter.parse("2023-12-26"), formatter.parse("2023-12-25"), true);
+            repository.all(new DateRange(formatter.parse("2023-12-26"), formatter.parse("2023-12-25")), true);
         });
     }
 
@@ -50,7 +49,7 @@ class TransferRepositoryTest {
         TransferRepository repository = new TransferRepository(store);
 
         assertThrows(IllegalArgumentException.class, () -> {
-            repository.all(formatter.parse("9999-12-25"), formatter.parse("9999-12-25"), true);
+            repository.all(new DateRange(formatter.parse("9999-12-25"), formatter.parse("9999-12-25")), true);
         });
     }
 }

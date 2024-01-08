@@ -18,7 +18,7 @@ public class Statement {
     public String transactionReport(DateRange period) {
         StringBuilder builder = new StringBuilder();
         builder.append(String.format("Transaction Report for account %s - (%s - %s)", account.name(), formatter.format(period.from()), formatter.format(period.to())));
-        for (Transfer transfer: transferRepository.all(period.from(), period.to(), false)) {
+        for (Transfer transfer: transferRepository.all(period, false)) {
             builder.append(String.format("From: %s, To: %s, Amount: %s", transfer.from(), transfer.to(), transfer.amount()));
         }
         return builder.toString();
@@ -41,7 +41,7 @@ public class Statement {
             builder.append(String.format("Amount: %s", payment.amount()));
         }
         builder.append("Transactions");
-        for (Transfer transfer: transferRepository.all(period.from(), period.to(), false)) {
+        for (Transfer transfer: transferRepository.all(period, false)) {
             builder.append(String.format("From: %s, To: %s, Amount: %s", transfer.from(), transfer.to(), transfer.amount()));
         }
         return builder.toString();

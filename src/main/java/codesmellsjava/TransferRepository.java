@@ -18,17 +18,13 @@ public class TransferRepository {
         this.store = store;
     }
 
-    public List<Transfer> all(Date from, Date to, boolean includePending) {
-        if (from.after(to)) {
-            throw new IllegalArgumentException();
-        }
-
-        if (from.after(Date.from(Instant.now()))) {
+    public List<Transfer> all(DateRange range, boolean includePending) {
+        if (range.rangeIsInTheFuture()) {
             throw new IllegalArgumentException();
         }
 
         return store
-                .between(from, to)
+                .between(range.from(), range.to())
                 .pending(includePending)
                 .execute();
     }
