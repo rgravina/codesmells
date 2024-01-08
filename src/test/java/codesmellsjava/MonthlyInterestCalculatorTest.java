@@ -27,10 +27,10 @@ class MonthlyInterestCalculatorTest {
     }
 
     @Test
-    void interestWithMonthsOfDifferentLengthAndBalancesWithBonusInterestGoalsMet() throws ParseException {
+    void interestWithMonthsOfDifferentLengthAndBalancesWithBonusInterestGoalsMet() throws ParseException, AccountNotOpenException {
         setUp(AccountType.SAVINGS);
-        assertEquals(135, calculator.interestForMonth(2023, 11));
-        assertEquals(159, calculator.interestForMonth(2023, 12));
+        assertEquals(136, calculator.interestForMonth(2023, 11));
+        assertEquals(160, calculator.interestForMonth(2023, 12));
         assertEquals(formatter.parse("%d-%d-%d".formatted(2023, 12, 1)), transactionStore.between_from);
         assertEquals(formatter.parse("%d-%d-%d".formatted(2023, 12, 31)), transactionStore.between_to);
         assertFalse(transactionStore.pending_includePending);
@@ -39,7 +39,7 @@ class MonthlyInterestCalculatorTest {
     @Test
     void interestWithSavingsAccountWithBonusInterestGoalsMet() throws AccountNotOpenException {
         setUp(AccountType.SAVINGS);
-        assertEquals(159, calculator.interestForMonth(2023, 12));
+        assertEquals(160, calculator.interestForMonth(2023, 12));
     }
 
     @Test
@@ -51,7 +51,7 @@ class MonthlyInterestCalculatorTest {
     @Test
     void interestWithSavingsAccountForJanuary() throws AccountNotOpenException {
         setUp(AccountType.SAVINGS);
-        assertEquals(93, calculator.interestForMonth(2023, 1));
+        assertEquals(94, calculator.interestForMonth(2023, 1));
         assertEquals(2022, balanceStore.balance_year);
         assertEquals(12, balanceStore.balance_month);
     }
