@@ -2,9 +2,10 @@ package codesmellsjava;
 
 import java.time.YearMonth;
 
+import static java.util.Arrays.asList;
+
 public class SavingsAccountDailyInterestCalculator implements DailyInterestCalculator {
-    public static final int MIN_TRANSACTIONS_FOR_BONUS_INTEREST = 5;
-    private final BalanceRepository balanceRepository;
+     private final BalanceRepository balanceRepository;
     private final TransactionRepository transactionRepository;
     private final TransferRepository transferRepository;
 
@@ -24,16 +25,12 @@ public class SavingsAccountDailyInterestCalculator implements DailyInterestCalcu
     }
 
     private boolean hasMetBonusInterestRequirements(YearMonth yearMonth, int currentBalance) {
-        DateRange currentMonth = DateRange.rangeForMonth(yearMonth.getYear(), yearMonth.getMonthValue());
-        boolean hasMinimumNumberOfTransactionsThisMonth = transactionRepository.all(currentMonth, false).size() >= MIN_TRANSACTIONS_FOR_BONUS_INTEREST;
-        boolean hasHadMoneyDeposited = !transferRepository.all(currentMonth, false).isEmpty();
-        boolean balanceIsHigherThanEndOfPreviousMonth = balanceRepository.balance(
-                yearMonth.minusYears(1).getYear(),
-                yearMonth.minusMonths(1).getMonthValue(),
-                1) < currentBalance;
-
-        return hasMinimumNumberOfTransactionsThisMonth &&
-                hasHadMoneyDeposited &&
-                balanceIsHigherThanEndOfPreviousMonth;
+        return new BonusInterestCriteria(
+                asList(
+                        new MinimumTransactionsCriteria(transactionRepository),
+                        new DepositCriteria(transferRepository),
+                        new BalanceIncreaseCriteria(balanceRepository, currentBalance)
+                )
+        ).hasBeenMet(yearMonth);
     }
 }
