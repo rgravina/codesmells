@@ -12,6 +12,9 @@ public interface DailyInterestCalculator {
             case SAVINGS -> new SavingsAccountDailyInterestCalculator(
                     balanceRepository, transactionRepository, transferRepository
             );
+            case INVESTMENT -> new InvestmentAccountDailyInterestCalculator(
+                    transactionRepository, transferRepository
+            );
         };
     }
 

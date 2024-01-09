@@ -4,32 +4,28 @@ import java.time.YearMonth;
 
 import static java.util.Arrays.asList;
 
-public class SavingsAccountDailyInterestCalculator implements DailyInterestCalculator {
-    private final BalanceRepository balanceRepository;
+public class InvestmentAccountDailyInterestCalculator implements DailyInterestCalculator {
     private final TransactionRepository transactionRepository;
     private final TransferRepository transferRepository;
 
-    public SavingsAccountDailyInterestCalculator(
-            BalanceRepository balanceRepository,
+    public InvestmentAccountDailyInterestCalculator(
             TransactionRepository transactionRepository,
             TransferRepository transferRepository) {
-        this.balanceRepository = balanceRepository;
         this.transactionRepository = transactionRepository;
         this.transferRepository = transferRepository;
     }
 
     public double dailyInterestRate(YearMonth yearMonth, int currentBalance) {
-        return hasMetBonusInterestRequirements(yearMonth, currentBalance) ?
-                InterestDailyRate.SAVINGS_DAILY_RATE :
+        return hasMetBonusInterestRequirements(yearMonth) ?
+                InterestDailyRate.INVESTMENT_DAILY_RATE :
                 InterestDailyRate.TRANSACTION_DAILY_RATE;
     }
 
-    private boolean hasMetBonusInterestRequirements(YearMonth yearMonth, int currentBalance) {
+    private boolean hasMetBonusInterestRequirements(YearMonth yearMonth) {
         return new BonusInterestCriteria(
                 asList(
                         new MinimumTransactionsCriteria(transactionRepository),
-                        new DepositCriteria(transferRepository),
-                        new BalanceIncreaseCriteria(balanceRepository, currentBalance)
+                        new DepositCriteria(transferRepository)
                 )
         ).hasBeenMet(yearMonth);
     }

@@ -1,5 +1,5 @@
 package codesmellsjava;
 
 public enum AccountType {
-    TRANSACTION, SAVINGS
+    TRANSACTION, SAVINGS, INVESTMENT
 }
