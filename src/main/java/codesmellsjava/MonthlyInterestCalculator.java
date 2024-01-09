@@ -5,7 +5,7 @@ import java.time.YearMonth;
 public class MonthlyInterestCalculator {
     private final BankAccount account;
     private final BalanceRepository balanceRepository;
-    private DailyInterestCalculator dailyInterestCalculator;
+    private final DailyInterestCalculator dailyInterestCalculator;
 
     public MonthlyInterestCalculator(
             BankAccount account,
@@ -14,12 +14,12 @@ public class MonthlyInterestCalculator {
             TransferRepository transferRepository) {
         this.account = account;
         this.balanceRepository = balanceRepository;
-        switch (account.accountType()) {
-            case TRANSACTION -> this.dailyInterestCalculator = new TransactionAccountDailyInterestCalculator();
-            case SAVINGS -> this.dailyInterestCalculator = new SavingsAccountDailyInterestCalculator(
-                    balanceRepository, transactionRepository, transferRepository
-            );
-        }
+        this.dailyInterestCalculator = DailyInterestCalculator.create(
+                account,
+                balanceRepository,
+                transactionRepository,
+                transferRepository
+        );
     }
 
     public int interestForMonth(int year, int month) throws AccountNotOpenException {
