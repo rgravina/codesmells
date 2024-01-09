@@ -23,7 +23,13 @@ class MonthlyInterestCalculatorTest {
         Account from = new Account("test", AccountType.TRANSACTION, 50000);
         Store<Transfer> transferStore = new StubTransferStore(from, account);
         TransferRepository transferRepository = new TransferRepository(transferStore);
-        calculator = new MonthlyInterestCalculator(account, balanceRepository, transactionRepository, transferRepository);
+        DailyInterestCalculator interestCalculator = DailyInterestCalculator.create(
+                account,
+                balanceRepository,
+                transactionRepository,
+                transferRepository
+        );
+        calculator = new MonthlyInterestCalculator(account, balanceRepository, interestCalculator);
     }
 
     @Test

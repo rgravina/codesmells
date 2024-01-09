@@ -10,16 +10,10 @@ public class MonthlyInterestCalculator {
     public MonthlyInterestCalculator(
             BankAccount account,
             BalanceRepository balanceRepository,
-            TransactionRepository transactionRepository,
-            TransferRepository transferRepository) {
+            DailyInterestCalculator dailyInterestCalculator) {
         this.account = account;
         this.balanceRepository = balanceRepository;
-        this.dailyInterestCalculator = DailyInterestCalculator.create(
-                account,
-                balanceRepository,
-                transactionRepository,
-                transferRepository
-        );
+        this.dailyInterestCalculator = dailyInterestCalculator;
     }
 
     public int interestForMonth(int year, int month) throws AccountNotOpenException {

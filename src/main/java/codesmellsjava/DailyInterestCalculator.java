@@ -2,7 +2,7 @@ package codesmellsjava;
 
 import java.time.YearMonth;
 
-interface DailyInterestCalculator {
+public interface DailyInterestCalculator {
     static DailyInterestCalculator create(BankAccount account,
                                           BalanceRepository balanceRepository,
                                           TransactionRepository transactionRepository,
