@@ -88,6 +88,26 @@ class Account implements BankAccount {
         to.deposit(amount);
     }
 
+    void fundWithCash(int amount) {
+        CashDeposit cashDeposit = new CashDeposit(amount);
+        this.deposit(amount);
+        cashDeposit.storeInVault(BranchLocation.MELBOURNE);
+    }
+
+    void fundWithPoints(int amount) {
+        PointDeposit pointDeposit = new PointDeposit(amount);
+        int amountInAUD = pointDeposit.convertToAUD();
+        this.deposit(amountInAUD);
+        pointDeposit.deductPointsFromAccount();
+    }
+
+    void fundWithLoan(int amount) {
+        LoanDeposit loanDeposit = new LoanDeposit(amount);
+        loanDeposit.creditCheck();
+        this.deposit(amount);
+        loanDeposit.startLoan();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
